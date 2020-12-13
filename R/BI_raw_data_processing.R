@@ -73,6 +73,8 @@ purrr::map(
 )
 
 
+#BI <- readRDS('./data/BI.all.raw.count.seurat.rda')
+
 # normalize and reduce data
 BI <- Seurat::NormalizeData(BI, normalization.method = "LogNormalize", scale.factor = 10000)
 BI <- Seurat::FindVariableFeatures(BI, selection.method = "vst", nfeatures = 2000)
