@@ -42,6 +42,8 @@ BI <- Seurat::SetIdent(BI, value = 'seurat_clusters')
 
 base::rm(count.raw, meta_df)
 
+#BI <- readRDS('./data/BI.all.raw.count.seurat.rda')
+
 
 # subset cells by cell type
 cell_types <- Idents(BI) %>% levels()
@@ -73,8 +75,6 @@ purrr::map(
 )
 
 
-#BI <- readRDS('./data/BI.all.raw.count.seurat.rda')
-
 # normalize and reduce data
 BI <- Seurat::NormalizeData(BI, normalization.method = "LogNormalize", scale.factor = 10000)
 BI <- Seurat::FindVariableFeatures(BI, selection.method = "vst", nfeatures = 2000)
@@ -82,6 +82,7 @@ BI <- Seurat::ScaleData(BI)
 BI <- Seurat::RunPCA(BI, features = VariableFeatures(object = BI))
 BI <- Seurat::RunUMAP(BI, dims = 1:20)
 
+cell_types <- cell_types[!cell_types %in% c("HypEPC", "NEUT", "TNC")]
 BI_by_cell_types <-  purrr::map(
   .x = cell_types,
   .f = function(ct){
@@ -96,6 +97,7 @@ BI_by_cell_types <-  purrr::map(
   }
 )
 
+names(BI_by_cell_types) <- cell_types
 
 # save normalized and reduced data
 base::saveRDS(
