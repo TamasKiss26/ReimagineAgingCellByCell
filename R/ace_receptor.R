@@ -76,3 +76,22 @@ MySplitFeaturePlot(gene_abr = 'Agt', gene_name = 'angiotensinogen')
 MySplitFeaturePlot(gene_abr = 'Agtr1b', gene_name = 'angiotensin II receptor, type 1b')
 MySplitFeaturePlot(gene_abr = 'Arap1', gene_name = 'ArfGAP with RhoGAP domain, ankyrin repeat and PH domain 1 ')
 MySplitFeaturePlot(gene_abr = 'Arrb2', gene_name = 'arrestin, beta 2')
+
+
+# dotplot
+DP_young <- DotPlot(object = Seurat::SplitObject(object = BI, split.by = 'age')[[1]], features = c('Agtrap', 'Agt', 'Agtr1b', 'Arap1', 'Arrb2')) +
+  xlab('') +
+  ylab('') +
+  NoLegend()
+
+DP_aged <- DotPlot(object = Seurat::SplitObject(object = BI, split.by = 'age')[[2]], features = c('Agtrap', 'Agt', 'Agtr1b', 'Arap1', 'Arrb2')) +
+  xlab('') +
+  ylab('') +
+  NoLegend()
+
+ggpubr::get_legend(DP_aged)
+
+ggpubr::ggarrange(
+  plotlist = list(DP_young, DP_aged),
+  ncol = 2, nrow = 1
+)
