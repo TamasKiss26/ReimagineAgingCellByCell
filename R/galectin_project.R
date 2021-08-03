@@ -277,8 +277,22 @@ ggsave(
   dpi = 'retina'
 )
 
+# chi-square test
+microglia_galectin_table <- mg.BI[[]] %>% 
+  dplyr::group_by(galectin, seurat_clusters) %>%
+  dplyr::summarise(N = n()) %>%
+  tidyr::pivot_wider(names_from = seurat_clusters, values_from = N) %>% 
+  tibble::column_to_rownames('galectin') %>%
+  base::as.matrix() %>%
+  base::as.table()
 
-# model galectin positivity
+stats::chisq.test(
+  x = microglia_galectin_table,
+  simulate.p.value = T
+)
+
+
+# model galectin positivist
 galectin_train <- mg.BI[[]] %>% 
   dplyr::select(seurat_clusters, galectin) %>%
   dplyr::mutate_if(
